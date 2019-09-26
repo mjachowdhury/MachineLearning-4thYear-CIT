@@ -43,4 +43,3 @@ def bikes():
     print("Average number of rentals: ", numberOfRentals / numberOfDays)
 
 bikes()
-l

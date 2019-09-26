@@ -66,10 +66,35 @@ If data is a scalar value, an index must be provided. The value will be repeated
 scalarValue = pd.Series(5., index=['A','B','C','D','E'])
 print(scalarValue)
 
+#A Series is like a fixed-size dict in that you can get and set values by index label:
+
+
 newSeries = pd.Series(np.random.rand(5), index=['a', 'b','c', 'd','e'])
 print('Printing new series:\n',newSeries)
 print('Random index value is:',newSeries['a'])
 print('Random index value is:',newSeries['e'])
+print('Checking is index value is there:', 'e' in newSeries)
+print('Checking is index value is there:', 'f' in newSeries)
+
+#If a label is not contained, an exception is raised:
+#print('Checking is index value is there:', newSeries['f'])
+
+#Using the get method, a missing label will return None or specified default:
+print(newSeries.get('f'))
+print(newSeries.get('f', np.nan))
+
+'''
+Vectorized operations and label alignment with Series
+When working with raw NumPy arrays, looping through value-by-value is usually not necessary. The same is true when working with Series in pandas. Series can also be passed into most NumPy methods expecting an ndarray.
+'''
+sSeries = pd.Series([2,4,6,8,10], index=['a', 'b','c', 'd','e'])
+print('Actual value in the sSeries before adding:\n', sSeries)
+print('Adding random values 2 time:\n', sSeries + sSeries)
+print('Multiplying the sSeries:\n', sSeries * 3)
+print('Gettign the exponaent value from sSeries:\n', np.exp(sSeries))
+
+
+
 
 
 
