@@ -11,60 +11,113 @@ import numpy as np
 minWordLength = 2
 minWordOccurences = 2
 
-df = pd.read_excel("movie_reviews.xlsx",skipinitialspace=True)
-trainingDF = df['Review','Sentiment','Split'][df['Split'] == 'train']
-evaluationDF = df['Review','Sentiment','Split'][df['Split'] == 'test']
+#movies = pd.read_excel("movie_reviews.xlsx")
+#df = pd.DataFrame(movies, columns = ['Review','Sentiment','Split'])
+#df = pd.DataFrame(movies, columns = ['Review','Sentiment','Split'])
 
+#trainingDF = df[df['Split'] == "train"]
+#evaluationDF = df[df['Split'] == "test"]
 
+def task1():
+    movies = pd.read_excel("movie_reviews.xlsx")
+    df = pd.DataFrame(movies, columns = ['Review', 'Sentiment', 'Split'])
 
-def task1(trainingDF, evaluationDF):
+    trainingDF = df[df['Split'] == "train"]
     trainData = trainingDF['Review']
-    testData = evaluationDF['Review']
+    trainDataList = list(trainData)
+   
+    trainLabels = df[df['Split'] == "train"]
+    trainLabels = trainLabels['Sentiment']
+    trainLabelsList = list(trainLabels)
+    
+    
+    testDF = df[df['Split'] == "test"]
+    testData = testDF['Review']
+    testDataList = list(testData)
+    
+    testLabels = df[df['Split'] == "train"]
+    testLabels = testLabels['Sentiment']
+    testLabelsList = list(testLabels)
+    
+    positiveDFTrainSet = df[df['Split'] == "train"]
+    positiveReviewTrainSet = positiveDFTrainSet['Sentiment'] == "positive"
+    valueCountsPositiveTrainSet = positiveReviewTrainSet.value_counts()
+    
+    negativeDFTrainSet = df[df['Split'] == "train"]
+    negativeReviewTrainSet = negativeDFTrainSet['Sentiment'] == "negative"
+    valueCountsNegativeTrainSet = negativeReviewTrainSet.value_counts()
+    
+    
+    positiveDFTestSet = df[df['Split'] == "test"]
+    positiveReviewTestSet = positiveDFTestSet['Sentiment'] == "positive"
+    valueCountsPositiveTestSet = positiveReviewTestSet.value_counts()
+    
+    
+    negativeDFTestSet = df[df['Split'] == "test"]
+    negativeReviewTestSet = negativeDFTestSet['Sentiment'] == "negative"
+    valueCountsNegativeTestSet = negativeReviewTestSet.value_counts()
+    
+    
+    #trainPosReviewCount = trainLabes[trainLabels['Sentiment']=="Positive"]
+#     trainNegReviewCount = (trainLabels.value_counts() ) - (trainPosReviewCount)
+# 
+#     testPosReviewCount = testLabels[testLabels['Sentiment']=='Positive'].value_counts()
+#     testNegReviewCount = (testLabels.value_counts() ) - (testPosReviewCount)
+# =============================================================================
 
-    trainLabels = trainingDF['Sentiments']
-    testLabels = evaluationDF['Sentiments']
+# =============================================================================
+    print("Number of positive reviews in the training set: " , valueCountsPositiveTrainSet)
+    print("Number of negative reviews in the training set: " , valueCountsNegativeTrainSet)
+    
+    print("Number of positive reviews in the training set: " , valueCountsPositiveTestSet)
+    print("Number of negative reviews in the training set: " , valueCountsNegativeTestSet)
+    
+    #print("Number of positive reviews in the training set: " , positiveReviewTrainSet)
+    #print("Number of negative reviews in the training set: " , negativeReviewTrainSet)
+    #print("Number of positive reviews in the test set: ", positiveReviewTestSet)
+    #print("Number of negative reviews in the test set: ", negativeReviewTestSet)
+# =============================================================================
 
-    trainPosReviewCount = trainLabels[trainLabels['Sentiments']=='Positive'].value_counts()
-    trainNegReviewCount = (trainLabels.value_counts() ) - (trainPosReviewCount)
+    #print(testDataList)
+    #print(trainDataList)
+    #print(trainLabelsList)
+    #print(list(testLabels.value_counts()))
+    #print(movies.head()) # will print first five rows
+    #print(movies.describe())#will print details of the file
 
-    testPosReviewCount = testLabels[testLabels['Sentiments']=='Positive'].value_counts()
-    testNegReviewCount = (testLabels.value_counts() ) - (testPosReviewCount)
+    return trainDataList, testDataList, trainLabelsList, testLabelsList
 
-    print("Number of positive reviews in the training set: " , trainPosReviewCount)
-    print("Number of negative reviews in the training set: " , trainNegReviewCount)
-    print("Number of positive reviews in the test set: ", testPosReviewCount)
-    print("Number of negative reviews in the test set: ", testNegReviewCount)
-
-    print(testData.value_counts())
-
-    return trainData.to_list(), testData.to_list(), trainLabels.to_list(), testLabels.to_list()
-
-def task2(trainData, minWordLength, minWordOccurences):
-    counts = dict()
-
-    for word in trainData.replace('&', '').replace('%', '').replace('@', '').replace('!', '').replace('.', '').replace('..', '').replace('...', '').replace(',', '').replace('-', '').split():
-        word = word.lower()
-
-        if len(word) > minWordLength:
-            if word in counts:
-
-                counts[word] += 1
-
-            else:
-                counts[word] = 1
-        else:
-            continue
-
-    for x in counts:
-        if counts[x].values() < minWordOccurences:
-            del counts[x]
-        else:
-            continue
-
-
-    wordList = list(counts.keys())
-
-    return wordList
+def task2():
+    taskOne = task1()
+    test =taskOne[0].str.replace('[^a-zA-Z0-9 ]', ' ').str.lower().str.split(expand=True).stack().value_counts()
+    print(test)
+# =============================================================================
+#     counts = dict()
+# 
+#     for word in taskOne.replace('&', '').replace('%', '').replace('@', '').replace('!', '').replace('.', '').replace('..', '').replace('...', '').replace(',', '').replace('-', '').split():
+#         word = word.lower()
+# 
+#         if len(word) > minWordLength:
+#             if word in counts:
+# 
+#                 counts[word] += 1
+# 
+#             else:
+#                 counts[word] = 1
+#         else:
+#             continue
+# 
+#     for x in counts:
+#         if counts[x].values() < minWordOccurences:
+#             del counts[x]
+#         else:
+#             continue
+# 
+# 
+#     wordList = list(counts.keys())
+# 
+#     return wordList
+# =============================================================================
 
 def task3(df, listofwords ):
     positiveReviewOccurences = dict()
@@ -78,6 +131,6 @@ def task3(df, listofwords ):
 
 def main():   
     task1()
-    task2()
-
+    #task2()
+    #task3()
 main()
