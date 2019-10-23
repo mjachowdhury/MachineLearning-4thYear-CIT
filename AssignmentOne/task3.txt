@@ -1,0 +1,21 @@
+train_Series = pd.Series(train_data) 
+    train_labels = pd.Series(train_labels) 
+    combine_set=  pd.concat([train_Series, train_labels], axis=1)
+  
+    postive_reviews = combine_set[combine_set[1] == "positive"].copy() #used copy() to get rid of wanring
+    negative_reviews = combine_set[combine_set[1] == "negative"].copy() #used copy() to get rid of wanring
+    
+    postive_reviews[0] = postive_reviews[0].str.split().apply(lambda i: list(set(i))) # making sure a word occurs only once per row
+    all_words = [i for j in postive_reviews[0].values.tolist() for i in j]
+    postive = {}
+    for i in split_words:
+        postive[i] = all_words.count(i)
+        
+    negative_reviews[0] = negative_reviews[0].str.split().apply(lambda i: list(set(i))) # making sure a word occurs only once per row
+    all_words = [i for j in negative_reviews[0].values.tolist() for i in j]
+    negative = {}
+    for i in split_words:
+        negative[i] = all_words.count(i)
+     
+    print(postive)
+    return postive, negative #return dictionary

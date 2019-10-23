@@ -23,15 +23,15 @@ def task_1():
     test_labels = df[df['Split'] == "test"]
     test_labels = test_labels['Sentiment']
 
-    print(train_labels.value_counts())
-    print(test_labels.value_counts())
+    #print(train_labels.value_counts())
+    #print(test_labels.value_counts())
 
     return train_data, train_labels,  test_data, test_labels
 
 def task_2():
     task_1_data = task_1()
-    #test =task_1_data[0].str.replace('[^a-zA-Z0-9 ]', ' ').str.lower().str.split().tolist()
-    test =task_1_data[0].str.replace('[^a-zA-Z0-9 ]', ' ').str.lower().str.split(expand=True).stack().value_counts()
+    test =task_1_data[0].str.replace('[^a-zA-Z0-9 ]', ' ').str.lower().str.split().tolist()
+    #test =task_1_data[0].str.replace('[^a-zA-Z0-9 ]', ' ').str.lower().str.split(expand=True).stack().value_counts()
    # task_1_data[0].Series(' '.join(df['text']).lower().split()).value_counts()[:100]
     # task_1_data[0].str.replace('[^a-zA-Z0-9 ]', '').str.lower()
   #  print(task_1_data[0].replace('[^a-zA-Z0-9 ]', '').str.lower().str.split(expand=True).stack().value_counts())
