@@ -15,9 +15,9 @@ import seaborn as sns
 import math
 
 
-minimumWordLength = 2
-minimumWordOccurences = 2
-inputStrNewReview = 'I used to love my country. now I do not like my coountry'
+minimumWordLength=0
+minimumWordOccurences=0
+
 
 '''
     : Main Function
@@ -27,7 +27,7 @@ def main():
     taskTwo(trainDataList,minimumWordLength,minimumWordOccurences)
     taskThree(positiveReviewDataF,negativeReviewDataF, wordList)
     taskFour(positiveReviewOccurences, negativeReviewOccurences, trainPositiveReviewCount, trainNegativeReviewCount)
-    taskFive(trainDataList[0], positiveLikeliHood,negativeLikeliHood, priorProbabilityPositive, priorProbabilityNegative)
+    taskFive(trainDataList[1], positiveLikeliHood,negativeLikeliHood, priorProbabilityPositive, priorProbabilityNegative)
 '''
     : TaskOne Function Spliting and counting the review
 '''
@@ -44,54 +44,58 @@ def taskOne():
     global trainingRevs
     global trainPositiveReviewCount
     global trainNegativeReviewCount
-    
+    global trainingDataF
+        
     '''
         :Reading Data From File  
     '''
     data = pd.read_excel('movie_reviews.xlsx')
-    
+     
     '''
-        :Spliting Data Based on the Split (Train / Test)
+         :Spliting Data Based on the Split (Train / Test)
     '''
     trainingDataF = data[['Review', 'Sentiment', 'Split']][data['Split'] == 'train']
     testDataF = data[['Review', 'Sentiment', 'Split']][data['Split'] == 'test']
-    
+     
+     
+     
     '''
         :Converting the DataFrame Review (train/test) to List
     '''
     trainDataList = trainingDataF['Review'].tolist()
+    #trainDataList = trainingDataF['Review'].str.split()
     testDataList = testDataF['Review'].tolist()
-    
+    print(type(trainDataList))
     '''
         :Converting the DataFrame Sentiment (train/test) to List
     '''
     trainLabelList = trainingDataF['Sentiment'].tolist()
     testLabelList = testDataF['Sentiment'].tolist()
-    
+     
     '''
         :Separating Data From Training based on Sentiment - Positive/Negative
     '''
     positiveReviewDataF = trainingDataF[trainingDataF['Sentiment'] == 'positive']
     negativeReviewDataF = trainingDataF[trainingDataF['Sentiment'] == 'negative']
-    
+     
     '''
-        :Separating Data From Test based on Sentiment - Positive/Negative
+         :Separating Data From Test based on Sentiment - Positive/Negative
     '''   
     testpositiveReviewDataF = testDataF[testDataF['Sentiment'] == 'positive']
     testnegativeReviewDataF = testDataF[testDataF['Sentiment'] == 'negative']
-    
+     
     '''
          :Total Positive and Negative review from trining data
     ''' 
     trainPositiveReviewCount = positiveReviewDataF.shape[0]
     trainNegativeReviewCount = negativeReviewDataF.shape[0]
-    
+     
     '''
         :Total Positive and Negative review from test data
     '''
     testPositiveReviewCount = testpositiveReviewDataF.shape[0]
     testNegativeReviewCount = testnegativeReviewDataF.shape[0]
-    
+     
     '''
          :Printing From Training Data Set Positive and Negative Review Counts
     ''' 
@@ -102,12 +106,13 @@ def taskOne():
     '''
     print("Total Number of Positive Reviews in the Test Set: ", testPositiveReviewCount)
     print("Total Number of Negative Reviews in the Test Set: ", testNegativeReviewCount)
-    
-    #print('TRAINING DATA REVIEW AS LIST: ', positiveReviewDF)
-    #sns.countplot(x='Sentiment', data=data) #will show the plot
+     
+     #print('TRAINING DATA REVIEW AS LIST: ', positiveReviewDF)
+     #sns.countplot(x='Sentiment', data=data) #will show the plot
     '''
-        :Returning Four Lists
+         :Returning Four Lists
     ''' 
+ 
     return trainDataList, testDataList, trainLabelList, testLabelList
 
 '''
@@ -117,10 +122,15 @@ def taskOne():
 def taskTwo(trinDataList, minWordLen, minWordOcc):
     #Created global variable
     global wordList
+    global trainAllWords
+    
+    minWordLen = int(input("ENTER MINUMUM LENGTH OF THE WORDS : "))
+    minWordOcc = int(input("ENTER MINIMUM WORD OCCURANCE : "))
+    
     
     #Created dic
     countWords = dict()
-    
+    #print('Printing one review ', trinDataList[1])
     #Removing all the non-alphanumeric char
     for word in trinDataList:
         word = word.lower()
@@ -130,8 +140,8 @@ def taskTwo(trinDataList, minWordLen, minWordOcc):
         s = re.sub("[^a-zA-Z0-9!]", ' ', word)
         words = s.split()
 
-    print('Words as a List', words)
-
+    #print('Words as a List', words)
+    #print('printing single value: ', words[0])
     #Checking all the words based on the condition minimum word length
     for word in words:
         if len(word) > minWordLen:
@@ -141,17 +151,18 @@ def taskTwo(trinDataList, minWordLen, minWordOcc):
 
             else:
                 countWords[word] = 1
-
-    print('Total Words Count After Removing Non-Alphanumeric Characters : ',countWords)
+    print("Length of the word : " , countWords)
+    #print('Total Words Count After Removing Non-Alphanumeric Characters : ',countWords)
     
     #Checking minimum word occurance condition
-    for key,val in list(countWords.items()):
-        if val < minWordOcc:
-         del countWords[key]
+    #for key,val in list(countWords.items()):
+     #   print("Name of the words: ", words, "number of times appear:--->", minWordOcc)
+     #   if val < minWordOcc:
+         #del countWords[key]
          
     #Converting dic to list  
     wordList = list(countWords.keys())
-    print('Word List: ', wordList )
+    #print('Word List: ', wordList )
     
     return wordList
 
@@ -180,7 +191,7 @@ def taskThree(posReview, negReview, wordL):
                 count = count + 1
         positiveReviewOccurences[word] = count # Adding word to the dic
         
-    print(positiveReviewOccurences)
+    #print("Positive Frequncy occurance: ",positiveReviewOccurences)
     
     print('\n')
     
@@ -192,7 +203,7 @@ def taskThree(posReview, negReview, wordL):
                 counts = counts + 1
         negativeReviewOccurences[negWord] = counts # Adding word to the dic
         
-    print(negativeReviewOccurences)
+    #print("Negative Fequency Occurance : ",negativeReviewOccurences)
     
     return positiveReviewOccurences, negativeReviewOccurences
 
@@ -232,19 +243,19 @@ def taskFour(posReviewOcc, negReviewOcc, posReviewCount, negReviewCount):
         y =  (value + laplace) / (priorProbabilityNegative + (m2 * laplace))
         negativeLikeliHood[key] = y
 
-    print("\n ======================PRIOR FOR POSITIVE =============================\n")
+    print("\n ================PRIOR FOR POSITIVE ==================\n")
     print(priorProbabilityPositive)
     
-    print("\n\t\t********************** PROBABILITY OF EACH WORDS FOR POSITIVE*********************\n")
-    print(positiveLikeliHood)
+    print("\n\t\t*********** PROBABILITY OF EACH WORDS FOR POSITIVE***************\n")
+    #print(positiveLikeliHood)
     
        
     
-    print("\n\t\t ==================PRIOR FOR NEGATIVE =============================\n")
+    print("\n\t\t ==================PRIOR FOR NEGATIVE ===================\n")
     print(priorProbabilityNegative)
 
-    print("\n\t\t********************** PROBABILITY OF EACH WORDS FOR NEGATIVE***********************\n")
-    print(negativeLikeliHood)
+    print("\n\t\t*************** PROBABILITY OF EACH WORDS FOR NEGATIVE********\n")
+    #print(negativeLikeliHood)
     
     #may be i do not need htis
     #probabilityOfLikelihood = {**positiveLikeliHood ,**negativeLikeliHood}
@@ -252,110 +263,63 @@ def taskFour(posReviewOcc, negReviewOcc, posReviewCount, negReviewCount):
     return positiveLikeliHood, negativeLikeliHood, priorProbabilityPositive, priorProbabilityNegative
 
 def taskFive(inputStr,positiveLikeliHood, negativeLikeliHood, priorProbabilityPositive,priorProbabilityNegative):
+    #global newtrainDataList
+    
     log_likelihoodPositive = 0
     log_likelihoodNegative = 0
     
-    print(trainDataList['Review'][1])
+    #NewtrainDataList = trainingDataF['Review'].str.split()
+    #newtrainDataList= trainDataList.str.split()
     
-    for word in trainDataList['Review'][1]:
-        print(word)
+# =============================================================================
+#     for word in inputStr:
+#         word = word.lower()
+#         word.split()
+#         s = ""
+#         s = word
+#         s = re.sub("[^a-zA-Z0-9!]", ' ', word)
+#         words = s.split()
+# =============================================================================
+# =============================================================================
+#     newList = list()
+#     for word in inputStr:
+#         itemWords = word.split()
+#         newList.extend(itemWords)
+#     print(newList)
+# =============================================================================
+    newList = str(inputStr).split()
+    #newList =[for line in inputStr.split()]    
+    #myInput = words
+    #print("Printing one review : ", newList)
+   
+    #print(trainDataList)
+    #newTrainDataList = range(len(trainDataList))
+    #print(trainDataList)
+    
+    for word in newList:
+        #print(word)
         for feature in positiveLikeliHood:
-            print(feature)
+            #print(feature)
             if word == feature:
-                print(positiveLikeliHood[feature])
-                log_likelihoodPositive = positiveLikeliHood+math.log(positiveLikeliHood[feature])
+                print("Positive likelihood: ", positiveLikeliHood[feature])
+                log_likelihoodPositive = log_likelihoodPositive+math.log(positiveLikeliHood[feature])
                 
     
-    for word in trainDataList['Review'][1]:
-        print(word)
+    #for word in trainDataList[1]:
+        #print(word)
         for feature in negativeLikeliHood:
-            print(feature)
+            #print(feature)
             if word == feature:
-                print(negativeLikeliHood[feature])
-                log_likelihoodNegative = negativeLikeliHood+math.log(negativeLikeliHood[feature])
+                print("Negative likelihood: ",negativeLikeliHood[feature])
+                log_likelihoodNegative = log_likelihoodNegative+math.log(negativeLikeliHood[feature])
     
-    print(log_likelihoodPositive)
-    print(log_likelihoodNegative)
-# =============================================================================
-#     #Initialize logpost[ci]: stores the posterior probability for class ci
-#     logpost = [None] * len(trainLabelList)
-#     
-#     for ci in trainLabelList:
-#         sumloglikelihoods = 0
-#         for word in inputStr:
-#             if word in wordL:
-#                 #This is sum represents log(P(w|c)) = log(P(w1|c)) + log(P(wn|c))
-#                 sumloglikelihoods += loglikelihood[ci][word]
-#         
-#     #Computes P(c|d)
-#         logpost[ci] = logprior[ci] + sumloglikelihoods
-# 
-#     #Return the class that generated max ĉ
-#     return logpost.index(max(logpost)) 
-# #training = trainDataList[:10000]
-# #trainLabelList = [0, 1]
-# =============================================================================
-
-# =============================================================================
-# def taskFive(training, trainLabelList):
-#     D_c = [[]] * len(trainLabelList)
-#     
-#     n_c = [None] * len(trainLabelList)
-#     
-#     logprior = [None] * len(trainLabelList)
-#     
-#     logLikeliHood = [None] * len(trainLabelList)
-#     
-#     for obs in training:
-#         if obs[1] >= 90:
-#             D_c[1] = D_c[1] + [obs]
-#         elif obs[1] < 90:
-#             D_c[0] = D_c[1] + [obs]
-#         
-#     V = []
-#     for obs in training:
-#         for word in obs[0]:
-#             if word in V:
-#                 continue
-#             else:
-#                 V.append(word)
-#     
-#     V_size = len(V)
-#     
-#     #n_docs: total number of documents in training set
-#     n_docs = len(training)
-# 
-#     for ci in range(len(trainLabelList)):
-#         #Store n_c value for each class
-#         n_c[ci] = len(D_c[ci])
-#         
-#         #Compute P(c)
-#         logprior[ci] = np.log((n_c[ci] + 1)/ n_docs)
-# 
-# 
-#         #Counts total number of words in class c
-#         count_w_in_V = 0
-#         for d in D_c[ci]:
-#             count_w_in_V = count_w_in_V + len(d[0])
-#         denom = count_w_in_V + V_size
-# 
-#         dic = {}
-#         #Compute P(w|c)
-#         for wi in V:
-#             #Count number of times wi appears in D_c[ci]
-#             count_wi_in_D_c = 0
-#             for d in D_c[ci]:
-#                 for word in d[0]:
-#                     if word == wi:
-#                         count_wi_in_D_c = count_wi_in_D_c + 1
-#             numer = count_wi_in_D_c + 1
-#             dic[wi] = np.log((numer) / (denom))
-#         logLikeliHood[ci] = dic
-#         
-#     return (V, logprior, logLikeliHood)
-# =============================================================================
-
-
+    print("Positive :" ,log_likelihoodPositive)
+    print("Negative :", log_likelihoodNegative)
+ 
+    if log_likelihoodPositive - log_likelihoodNegative > math.log(priorProbabilityPositive) - math.log(priorProbabilityNegative ):
+        print("Positive")
+    else:
+        print("Negative")
                
 '''
     : Calling main
