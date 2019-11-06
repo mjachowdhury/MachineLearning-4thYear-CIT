@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Oct 22 19:02:23 2019
+Created on Fri Oct 25 11:36:51 2019
 
 @author: Mohammed
 """
@@ -27,7 +27,8 @@ def main():
     taskTwo(trainDataList,minimumWordLength,minimumWordOccurences)
     taskThree(positiveReviewDataF,negativeReviewDataF, wordList)
     taskFour(positiveReviewOccurences, negativeReviewOccurences, trainPositiveReviewCount, trainNegativeReviewCount)
-    taskFive(trainDataList[1], positiveLikeliHood,negativeLikeliHood, priorProbabilityPositive, priorProbabilityNegative)
+    taskFive(trainDataList, positiveLikeliHood,negativeLikeliHood, priorProbabilityPositive, priorProbabilityNegative)
+    
 '''
     : TaskOne Function Spliting and counting the review
 '''
@@ -263,65 +264,32 @@ def taskFour(posReviewOcc, negReviewOcc, posReviewCount, negReviewCount):
     return positiveLikeliHood, negativeLikeliHood, priorProbabilityPositive, priorProbabilityNegative
 
 def taskFive(inputStr,positiveLikeliHood, negativeLikeliHood, priorProbabilityPositive,priorProbabilityNegative):
-    #global newtrainDataList
     
     log_likelihoodPositive = 0
     log_likelihoodNegative = 0
     
-    #NewtrainDataList = trainingDataF['Review'].str.split()
-    #newtrainDataList= trainDataList.str.split()
     
-# =============================================================================
-#     for word in inputStr:
-#         word = word.lower()
-#         word.split()
-#         s = ""
-#         s = word
-#         s = re.sub("[^a-zA-Z0-9!]", ' ', word)
-#         words = s.split()
-# =============================================================================
-# =============================================================================
-#     newList = list()
-#     for word in inputStr:
-#         itemWords = word.split()
-#         newList.extend(itemWords)
-#     print(newList)
-# =============================================================================
-    newList = str(inputStr).split()
-    #newList =[for line in inputStr.split()]    
-    #myInput = words
-    #print("Printing one review : ", newList)
-   
-    #print(trainDataList)
-    #newTrainDataList = range(len(trainDataList))
-    #print(trainDataList)
-    
-    for word in newList:
+    for word in inputStr:
         #print(word)
         for feature in positiveLikeliHood:
             #print(feature)
             if word == feature:
                 print("Positive likelihood: ", positiveLikeliHood[feature])
-                log_likelihoodPositive = log_likelihoodPositive+math.log(positiveLikeliHood[feature])
-                
+                 
     
-    #for word in trainDataList[1]:
+    for word in inputStr:
         #print(word)
         for feature in negativeLikeliHood:
             #print(feature)
             if word == feature:
                 print("Negative likelihood: ",negativeLikeliHood[feature])
-                log_likelihoodNegative = log_likelihoodNegative+math.log(negativeLikeliHood[feature])
-    
-    print("Positive :" ,log_likelihoodPositive)
-    print("Negative :", log_likelihoodNegative)
+                
+    print(log_likelihoodPositive)
+    print(log_likelihoodNegative)
  
-    if log_likelihoodPositive - log_likelihoodNegative > math.log(priorProbabilityPositive) - math.log(priorProbabilityNegative ):
-        print("Positive")
-    else:
-        print("Negative")
-               
 '''
     : Calling main
-'''               
-main()
+'''    
+    
+           
+main()             
