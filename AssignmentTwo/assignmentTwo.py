@@ -78,33 +78,39 @@ predictionAccuracy = []
 #K-Fold cross validation
 kf = model_selection.KFold(n_splits=2, shuffle=True)
 for train_index,test_index in kf.split(data.values):
-    
+    #Linear perception
     clf1 = linear_model.Perceptron()
     #clf2 = svm.SVC(kernel="rbf", gamma=1e-3)    
     #clf3 = svm.SVC(kernel="sigmoid", gamma=1e-4)
     
+    #Starting time for train
     trainStartTime = time.time()
     print('\nTrain Start Time was %g seconds :'%trainStartTime )
     
     clf1.fit(data.values[train_index], data.label[train_index ])
     
+    #End time for train 
     trainEndTime = time.time()
     print('Train End Time was %g seconds'%trainEndTime )
     print('Total Proess Elapsed time was %g seconds '% (trainEndTime - trainStartTime ))
+    #Adding the time to the list
     trainingTime.append(trainEndTime - trainStartTime )
     print('Total Elapsed Train Processing Time: ', trainingTime)
     
+    #Prediction start time 
     predictionStartTime = time.time()
     print('\nPrediction Start Time was %g seconds : '%predictionStartTime )
     
     prediction1 = clf1.predict(data.values[test_index])
-    print('Prediction level: ', prediction1)
+    #Prediction end time
     predictionEndTime = time.time()
     print('Prediction End Time was %g seconds  : '%predictionEndTime )
     print('Total Prediction Proess Time was %g seconds  : '%(predictionEndTime - predictionStartTime ))
     predictionTime.append(predictionEndTime - predictionStartTime )
     print('Elapsed Prediction Processing Time : ', predictionTime)
     
+    #Printing prediction level
+    print('Prediction level: ', prediction1)
     '''
     clf2.fit(data.values[train_index], data.label[train_index])
     prediction2 = clf2.predict(data.values[test_index])
@@ -112,21 +118,22 @@ for train_index,test_index in kf.split(data.values):
     clf3.fit(data.values[train_index], data.label[train_index])
     prediction3 = clf3.predict(data.values[test_index])
     '''
-    
+    #Getting accuracy score
     score1 = metrics.accuracy_score(data.label[test_index], prediction1)
     #score2 = metrics.accuracy_score(data.label[test_index], prediction2)
     #score3 = metrics.accuracy_score(data.label[test_index], prediction3)
     
-        
+    #Adding accuracy score to the list    
     predictionAccuracy.append(score1)
     print("\nPerceptron accuracy score: ", score1)
     
     #print("SVM with RBF kernel accuracy score: ", score2)
     #print("SVM with Sigmoid kernel accuracy score: ", score3)
-    
+    #GEtting the confusion matrix
     confusion = metrics.confusion_matrix(data.label[test_index], prediction1)
     print('\nConfusion Matrics: \n', confusion)    
     print()
+
 
 print('\nMaximum Prediction Accuracy :', np.max(predictionAccuracy))
 print('Minimum Prediction Accuracy :', np.min(predictionAccuracy))
