@@ -85,7 +85,7 @@ def task_two(data):
         print('Total Proess Elapsed time was %g on seconds '% (trainEndTime - trainStartTime ))
         #Adding train time to the list
         trainingTime.append(trainEndTime - trainStartTime )
-        print('Total Elapsed Train Processing Time: ', trainingTime)
+        print('Total Elapsed Train Processing Time inside the list: ', trainingTime)
         
         #Prediction start time
         predictionStartTime = time.time()
@@ -98,10 +98,10 @@ def task_two(data):
         print('Total Prediction Proess Time was %g seconds  : '%(predictionEndTime - predictionStartTime ))
         #Adding prediction time to the list
         predictionTime.append(predictionEndTime - predictionStartTime )
-        print('Elapsed Prediction Processing Time : ', predictionTime)
+        print('All Prediction Processing Time inside the list : ', predictionTime)
         
         #Print out the prediction label
-        print('\nPrediction level: ', prediction1)
+        print('\nPrediction level: \n', prediction1)
         '''
         clf2.fit(data.values[train_index], data.label[train_index])
         prediction2 = clf2.predict(data.values[test_index])
@@ -135,9 +135,9 @@ def task_two(data):
     print('Minimum Time For Train was %g seconds:'%np.min(trainingTime))
     print('Average Time For Train was %g seconds:'%np.mean(trainingTime))
     print()    
-    print('Maximum Time For Test was %g seconds:'%np.max(predictionTime))
-    print('Minimum Time For Test was %g seconds:'%np.min(predictionTime))
-    print('Average Time For Test was %g seconds:'%np.mean(predictionTime))
+    print('Maximum Time For Prediction was %g seconds:'%np.max(predictionTime))
+    print('Minimum Time For Prediction was %g seconds:'%np.min(predictionTime))
+    print('Average Time For Prediction was %g seconds:'%np.mean(predictionTime))
         
 
 '''
@@ -208,9 +208,9 @@ def task_two(data):
     print('Minimum Time For Train :', np.min(trainingTime))
     print('Average Time For Train :', np.mean(trainingTime))
     print()    
-    print('Maximum Time For Test :', np.max(testTime))
-    print('Minimum Time For Test :', np.min(testTime))
-    print('Average Time For Test :', np.mean(testTime))
+    print('Maximum Time For evaluation :', np.max(testTime))
+    print('Minimum Time For evaluation :', np.min(testTime))
+    print('Average Time For evaluation :', np.mean(testTime))
 '''        
 
 def task_three(data):
@@ -238,7 +238,7 @@ def task_three(data):
         
         #Train Start time
         trainStartTime = time.time()
-        print('Train Start Time: ',trainStartTime )
+        print('\nTrain Start Time: ',trainStartTime )
         
         #clf1.fit(data.values[train_index], data.label[train_index ])
         #prediction1 = clf1.predict(data.values[test_index])
@@ -251,22 +251,23 @@ def task_three(data):
         print('Total Proess Time : ', (trainEndTime - trainStartTime ))
         #Adding train time to the list
         trainingTime.append(trainEndTime - trainStartTime )
-        print('Training Time: ', trainingTime)
+        print('\nAll Training Time inside the list: ', trainingTime)
         
         #Prediction start time 
         predictionStartTime = time.time()
-        print('Prediction Start Time: ',predictionStartTime )
+        print('\nPrediction Start Time: ',predictionStartTime )
         
         prediction2 = clf2.predict(data.values[test_index])
-        print('Predict Label: ', prediction2)
+        
         #Prediction time end
         predictionEndTime = time.time()
         print('Prediction End Time : ',predictionEndTime )
-        print('Total Proess Time : ', (predictionEndTime - predictionStartTime ))
+        print('Total Prediction Proess Time : ', (predictionEndTime - predictionStartTime ))
         #Adding prediction time to the list
         predictionTime.append(predictionEndTime - predictionStartTime )
-        print('Prediction Time: ', predictionTime)
+        print('\nAll Prediction Time inside the list: ', predictionTime)
         
+        print('\nPredict Label: \n', prediction2)
         #clf3.fit(data.values[train_index], data.label[train_index])#support vector machine
         #prediction3 = clf3.predict(data.values[test_index])
         
@@ -291,7 +292,7 @@ def task_three(data):
         predictionAccuracy.append(score2)
         #print("Perceptron accuracy score: ", score2)
         
-        print("SVM with RBF linear accuracy score: ", score2)
+        print("\nSVM with RBF linear accuracy score: ", score2)
         
         print("SVM with Sigmoid liner accuracy score: ", score4)
         #Getting confusion matrix
@@ -307,9 +308,9 @@ def task_three(data):
     print('Minimum Time For Train was %g seconds:'%np.min(trainingTime))
     print('Average Time For Train was %g seconds:'%np.mean(trainingTime))
     print()    
-    print('Maximum Time For Test was %g seconds:'%np.max(predictionTime))
-    print('Minimum Time For Test was %g seconds:'%np.min(predictionTime))
-    print('Average Time For Test was %g seconds:'%np.mean(predictionTime))
+    print('Maximum Time For Prediction was %g seconds:'%np.max(predictionTime))
+    print('Minimum Time For Prediction was %g seconds:'%np.min(predictionTime))
+    print('Average Time For Prediction was %g seconds:'%np.mean(predictionTime))
         
     
 main()
