@@ -21,8 +21,11 @@ data = pd.read_csv("product_images.csv")
 
 
 def main():
+    print('\n=====TASK ONE=====')
     task_one(data)
+    print('\n=====TASK TWO=====')
     task_two(data)
+    print('\n=====TASK THREE=====')
     task_three(data)
     
 
@@ -49,6 +52,82 @@ def task_one(data):
     print('Ankle_Boots shape: ',ankleBoots.shape)
 
 def task_two(data):
+    data = data.head(1000)
+    #Display the values and lables
+    #print('Image Values: ', data.values)
+    #print('Image label : ', data.label)
+
+    trainingTime = []
+    predictionTime = []
+    predictionAccuracy = []
+
+    #K-Fold cross validation
+    kf = model_selection.KFold(n_splits=2, shuffle=True)
+    for train_index,test_index in kf.split(data.values):
+        
+        clf1 = linear_model.Perceptron()
+        #clf2 = svm.SVC(kernel="rbf", gamma=1e-3)    
+        #clf3 = svm.SVC(kernel="sigmoid", gamma=1e-4)
+        
+        trainStartTime = time.time()
+        print('\nTrain Start Time was %g seconds :'%trainStartTime )
+        
+        clf1.fit(data.values[train_index], data.label[train_index ])
+        
+        trainEndTime = time.time()
+        print('Train End Time was %g seconds'%trainEndTime )
+        print('Total Proess Elapsed time was %g seconds '% (trainEndTime - trainStartTime ))
+        trainingTime.append(trainEndTime - trainStartTime )
+        print('Total Elapsed Train Processing Time: ', trainingTime)
+        
+        predictionStartTime = time.time()
+        print('\nPrediction Start Time was %g seconds : '%predictionStartTime )
+        
+        prediction1 = clf1.predict(data.values[test_index])
+        print('Prediction level: ', prediction1)
+        predictionEndTime = time.time()
+        print('Prediction End Time was %g seconds  : '%predictionEndTime )
+        print('Total Prediction Proess Time was %g seconds  : '%(predictionEndTime - predictionStartTime ))
+        predictionTime.append(predictionEndTime - predictionStartTime )
+        print('Elapsed Prediction Processing Time : ', predictionTime)
+        
+        '''
+        clf2.fit(data.values[train_index], data.label[train_index])
+        prediction2 = clf2.predict(data.values[test_index])
+        
+        clf3.fit(data.values[train_index], data.label[train_index])
+        prediction3 = clf3.predict(data.values[test_index])
+        '''
+        
+        score1 = metrics.accuracy_score(data.label[test_index], prediction1)
+        #score2 = metrics.accuracy_score(data.label[test_index], prediction2)
+        #score3 = metrics.accuracy_score(data.label[test_index], prediction3)
+        
+            
+        predictionAccuracy.append(score1)
+        print("\nPerceptron accuracy score: ", score1)
+        
+        #print("SVM with RBF kernel accuracy score: ", score2)
+        #print("SVM with Sigmoid kernel accuracy score: ", score3)
+        
+        confusion = metrics.confusion_matrix(data.label[test_index], prediction1)
+        print('\nConfusion Matrics: \n', confusion)    
+        print()
+    
+    print('\nMaximum Prediction Accuracy :', np.max(predictionAccuracy))
+    print('Minimum Prediction Accuracy :', np.min(predictionAccuracy))
+    print('Average Prediction Accuracy :', np.mean(predictionAccuracy))
+    print()
+    print('Maximum Time For Train was %g seconds:'%np.max(trainingTime))
+    print('Minimum Time For Train was %g seconds:'%np.min(trainingTime))
+    print('Average Time For Train was %g seconds:'%np.mean(trainingTime))
+    print()    
+    print('Maximum Time For Test was %g seconds:'%np.max(predictionTime))
+    print('Minimum Time For Test was %g seconds:'%np.min(predictionTime))
+    print('Average Time For Test was %g seconds:'%np.mean(predictionTime))
+        
+
+'''
     #Parameterize the data
     data = data.head(1000)
     #Display the values and lables
@@ -105,7 +184,7 @@ def task_two(data):
         print("SVM with Sigmoid kernel accuracy score: ", score3)
         
         confusion = metrics.confusion_matrix(data.label[test_index], prediction1)
-        print('Confusion Matrics: ', confusion)    
+        print('Confusion Matrics: \n', confusion)    
         print()
     
     print('Maximum Time For Prediction Accuracy :', np.max(predictionAccuracy))
@@ -119,7 +198,7 @@ def task_two(data):
     print('Maximum Time For Test :', np.max(testTime))
     print('Minimum Time For Test :', np.min(testTime))
     print('Average Time For Test :', np.mean(testTime))
-        
+'''        
 
 def task_three(data):
     #Parameterize the data
@@ -129,29 +208,28 @@ def task_three(data):
     #print('Image label : ', data.label)
     
     trainingTime = []
-    testTime = []
+    predictionTime = []
     predictionAccuracy = []
     
     #K-Fold cross validation
     kf = model_selection.KFold(n_splits=2, shuffle=True)
     for train_index,test_index in kf.split(data.values):
         
-        clf1 = linear_model.Perceptron()
-        clf2 = svm.SVC(kernel="rbf", gamma=1e-3)    
-        clf3 = svm.SVC(kernel="liner", gamma=1e-4)
+        #clf1 = linear_model.Perceptron()
+        #support vector machine 
+        clf2 = svm.SVC(kernel="rbf", gamma=1e-3)#gama different choices
+        #clf3 = svm.SVC(kernel="rbf", gamma=1e-4)
+        
+        clf4 = svm.SVC(kernel="linear", gamma=1e-4)#linear kernel
         
         trainStartTime = time.time()
         print('Train Start Time: ',trainStartTime )
         
-        clf1.fit(data.values[train_index], data.label[train_index ])
-        prediction1 = clf1.predict(data.values[test_index])
+        #clf1.fit(data.values[train_index], data.label[train_index ])
+        #prediction1 = clf1.predict(data.values[test_index])
         #print('Prediction level: ', prediction1)
         
-        clf2.fit(data.values[train_index], data.label[train_index])
-        prediction2 = clf2.predict(data.values[test_index])
-        
-        clf3.fit(data.values[train_index], data.label[train_index])
-        prediction3 = clf3.predict(data.values[test_index])
+        clf2.fit(data.values[train_index], data.label[train_index])#support vector machine
         
         trainEndTime = time.time()
         print('End Time : ',trainEndTime )
@@ -159,26 +237,48 @@ def task_three(data):
         trainingTime.append(trainEndTime - trainStartTime )
         print('Training Time: ', trainingTime)
         
-        testStartTime = time.time()
-        print('Test Start Time: ',testStartTime )
         
-        score1 = metrics.accuracy_score(data.label[test_index], prediction1)
+        predictionStartTime = time.time()
+        print('Test Start Time: ',predictionStartTime )
+        
+        prediction2 = clf2.predict(data.values[test_index])
+        print('Predict Label: ', prediction2)
+        
+        predictionEndTime = time.time()
+        print('End Time : ',predictionEndTime )
+        print('Total Proess Time : ', (predictionEndTime - predictionStartTime ))
+        predictionTime.append(predictionEndTime - predictionStartTime )
+        print('Prediction Time: ', predictionTime)
+        
+        #clf3.fit(data.values[train_index], data.label[train_index])#support vector machine
+        #prediction3 = clf3.predict(data.values[test_index])
+        
+        clf4.fit(data.values[train_index], data.label[train_index])#linear kernel
+        prediction4 = clf4.predict(data.values[test_index])
+        
+       
+        
+        
+        
+       # score1 = metrics.accuracy_score(data.label[test_index], prediction1)
+       #accuracy score
         score2 = metrics.accuracy_score(data.label[test_index], prediction2)
-        score3 = metrics.accuracy_score(data.label[test_index], prediction3)
         
-        testEndTime = time.time()
-        print('End Time : ',testEndTime )
-        print('Total Proess Time : ', (testEndTime - testStartTime ))
-        testTime.append(testEndTime - testStartTime )
-        print('Prediction Time: ', testTime)
+        #score3 = metrics.accuracy_score(data.label[test_index], prediction3)
         
-        predictionAccuracy.append(score1)
-        print("Perceptron accuracy score: ", score1)
-        print("SVM with RBF liner accuracy score: ", score2)
-        print("SVM with Sigmoid liner accuracy score: ", score3)
+        score4 = metrics.accuracy_score(data.label[test_index], prediction4)
         
-        confusion = metrics.confusion_matrix(data.label[test_index], prediction1)
-        print('Confusion Matrics: ', confusion)    
+        
+        
+        predictionAccuracy.append(score2)
+        #print("Perceptron accuracy score: ", score2)
+        
+        print("SVM with RBF linear accuracy score: ", score2)
+        
+        print("SVM with Sigmoid liner accuracy score: ", score4)
+        
+        confusion = metrics.confusion_matrix(data.label[test_index], prediction2)
+        print('\nConfusion Matrics: \n', confusion)    
         print()
     
     print('Maximum Time For Prediction Accuracy :', np.max(predictionAccuracy))
@@ -189,9 +289,9 @@ def task_three(data):
     print('Minimum Time For Train :', np.min(trainingTime))
     print('Average Time For Train :', np.mean(trainingTime))
     print()    
-    print('Maximum Time For Test :', np.max(testTime))
-    print('Minimum Time For Test :', np.min(testTime))
-    print('Average Time For Test :', np.mean(testTime))
+    print('Maximum Time For Test :', np.max(predictionTime))
+    print('Minimum Time For Test :', np.min(predictionTime))
+    print('Average Time For Test :', np.mean(predictionTime))
         
     
 main()
