@@ -1,0 +1,39 @@
+     products = pd.read_csv("product_images.csv")
+
+      #Parameterise the number of samples to use from the dataset 
+    rows = np.random.choice(products.index.values, 100) 
+
+    samples = products.loc[rows]
+
+    
+    print(samples)
+    training_times1  = []
+    kf = model_selection.KFold(n_splits=2, shuffle=True)
+    for train_index, test_index in kf.split(samples):
+           clf = linear_model.Perceptron()
+           start_time = time.time()
+           clf.fit(samples.iloc[train_index, :], samples.label.iloc[train_index]) # train
+           end_time = time.time()
+           
+           start_time1 = time.time()
+           predict = clf.predict(samples.iloc[test_index, :]) #predict labels
+           score1 = metrics.accuracy_score(samples.label.iloc[test_index], predict) #accuracy
+           end_time1 = time.time()
+           
+           #confusion matrix
+           results = confusion_matrix(samples.label.iloc[test_index], predict) 
+           
+           print("confusion matrix:", results)
+           print("Train Time: Elapsed time was %g seconds" % (end_time - start_time))
+           print("Predction Time: Elapsed time was %g seconds" % (end_time1 - start_time1))
+           print("Perceptron accuracy score: ", score1)
+           
+           #Calculate the minimum, the maximum, and the average of the training time per training sample
+           training_times1.append(end_time - end_time)
+           maximum_time = max(training_times1)
+           minimum_time = min(training_times1)
+           average_time = sum(training_times1) / len(training_times1) if len(training_times1) > 0 else 0
+                
+           print("max", maximum_time)
+           print("min", minimum_time)
+           print("avr", average_time)
